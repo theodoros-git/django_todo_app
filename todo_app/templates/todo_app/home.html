@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Welcome
+{% endblock %}
+
+{% block content %}
+
+<section class="vh-100">
+  <div class="container  h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+    	<div class="col-md-3">
+    		
+    	</div>
+      <div class="col-md-6">
+        <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+          <div class="card-body py-4 px-4 px-md-5">
+
+            <p class="h2 text-center mt-3 mb-4 pb-3 text-primary">
+              <i class="fas fa-check-square me-1"></i>
+              <u>Welcome to your Todo App</u>
+            </p>
+
+            <p class="h5 mb-4" >Login to your account</p>
+
+            {% if messages %}
+							<ul class="messages">
+							    {% for message in messages %}
+							    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color : teal">{{ message }}</li>
+							    {% endfor %}
+							</ul>
+						{% endif %}
+            <form action="{% url 'todo_app:home' %}" method="post">
+            	{% csrf_token %}
+            	<p style="color: green;">{{ msg }}</p>
+            	<p style="color: red;">{{ error }}</p>
+			  <!-- Email input -->
+			  <div class="form-outline mb-4">
+			    <input type="email" id="{{ form.email.id_for_label }}" name="email" class="form-control" required="required" maxlength="254" value="{{ email }}"/>
+			    <label class="form-label" for="{{ form.email.id_for_label }}">Email address</label>
+			  </div>
+			  {{ form.email.errors }}
+
+			  <!-- Password input -->
+			  <div class="form-outline mb-4">
+			    <input type="password" id="{{ form.password.id_for_label }}" name="password" class="form-control" required="required" maxlength="12" minlength="6" />
+			    <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+			  </div>
+			  {{ form.password.errors }}
+
+			  <!-- 2 column grid layout for inline styling -->
+			  <div class="row mb-4">
+			    
+
+			    <div class="col">
+			      <!-- Simple link -->
+			     <p>Not have account? <a href="{% url 'todo_app:join' %}">Create account</a></p> 
+			    </div>
+			  </div>
+
+			  <!-- Submit button -->
+			  <button type="submit" class="btn btn-primary ">Login</button>
+			</form>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+    		
+    	</div>
+    </div>
+  </div>
+</section>
+{% endblock %}

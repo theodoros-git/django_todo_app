@@ -1,0 +1,145 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Analytics Pages
+{% endblock %}
+
+
+{% block javascripts %}
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script >
+
+	    $(document).on('click','.edit_todo',function(){
+	         let value = $(this).attr('value');
+	         let id = $(this).attr('id');
+	         $('.to_edit').attr("placeholder", value);
+	         $('.todo_edit_form').attr("action", "all/edit/"+id);
+	         
+	    });
+
+	    
+         
+	</script>
+{% endblock %}
+
+{% block content %}
+
+
+
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col">
+        <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+
+        	<div class="card-header">
+        		<div class="row">
+
+        			<div class="col-md-3">
+        					Todos Completed :  {{to_dos_complete.count}} <br>
+        					Todos Active :  {{to_dos_active.count}} <br>
+        					Total Todos : {{to_dos_all.count}}
+        			</div>
+
+        			<div class="col-md-6 text-center">
+        				 YOUR ANALYTICS PAGES
+        			</div>
+
+        			<div class="col-md-3">
+        				
+        			</div>
+        		</div>
+        	</div>
+          <div class="card-body py-4 px-4 px-md-5">
+          	User authenticated: {{ person.username }}
+            
+
+            <hr class="my-4">
+
+
+							
+
+            <div class="d-flex justify-content-end align-items-center ">
+
+              <form action="{% url 'todo_app:analytics_view' %}" method="post">
+            		{% csrf_token %}
+                <div class="d-flex flex-row align-items-center">
+                	
+                		<label>Start</label>
+                    <input type="date" class="form-control" name="start_date" id="start_date" value="{{ request.GET.start_date }}" required>
+
+                    <label>End</label>
+                    <input type="date" class="form-control " name="end_date" id="end_date" required value="{{ request.GET.end_date }}" >
+                    
+                    <div>
+                      <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                  
+                </div>
+              </form>
+              
+              
+            </div>
+
+            {% if messages %}
+							<ul class="messages">
+							    {% for message in messages %}
+							    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color : teal">{{ message }}</li>
+							    {% endfor %}
+							</ul>
+						{% endif %}
+
+            {% if to_dos_sorted.count > 0 %}
+
+	            {% for todo in to_dos_sorted %}
+
+		            <ul class="list-group list-group-horizontal rounded-0 bg-transparent">
+		              <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+		                <div class="form-check">
+
+		                	{% if todo.status == "not done" %}
+			                  
+				                  Not Done
+			                {% else %}
+			                	<input class="form-check-input me-0 status_todo"
+				                    type="checkbox"
+				                    value=""
+				                    aria-label=""
+				                    disabled
+				                    checked 
+				                  />
+						          	Completed
+						          {% endif %}
+		                </div>
+		              </li>
+		              <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+		                <p class="lead fw-normal mb-0">{{todo.name}}</p>
+		              </li>
+		              <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+		                <div class="d-flex flex-row justify-content-end mb-1">
+	 
+		                </div>
+		                <div class="text-end text-muted">
+		                  <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+		                    <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>{{todo.created_at}}</p></a>
+		                </div>
+		              </li>
+		            </ul>
+	            {% endfor %}
+
+	          {% else %}
+
+	          	You have not create a todo yet....
+	          {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+{% endblock %}
